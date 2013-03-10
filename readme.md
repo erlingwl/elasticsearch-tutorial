@@ -1,3 +1,16 @@
+Notes for my Elasticsearch tutorial at Boosterconf: http://boosterconf.no/talks/133/
+
+
+Prereqiusites
+=============
+
+Install Elasticsearch (http://www.elasticsearch.org/guide/reference/setup/installation.html) (requires Java)
+Install the Elasticsearch head plugin (http://www.elasticsearch.org/guide/reference/modules/plugins.html)
+
+
+Indexing, mapping and queries
+=============================
+
 Delete the index:
 
     curl -X DELETE http://localhost:9200/talks
