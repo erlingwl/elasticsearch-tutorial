@@ -5,6 +5,7 @@ Prereqiusites
 =============
 
 Install Elasticsearch (http://www.elasticsearch.org/guide/reference/setup/installation.html) (requires Java)
+
 Install the Elasticsearch head plugin (http://www.elasticsearch.org/guide/reference/modules/plugins.html)
 
 
@@ -111,3 +112,34 @@ Update the mapping:
     }'
 
 Reload the test data, try to search for the html markup again.
+
+Facets:
+
+    curl -XGET 'http://localhost:9200/talks/talk/_search?size=10&pretty' -d '{
+      "query": {
+        "query_string": {
+          "query": "acceptance_status: accepted"
+        }
+      },
+      "facets" : {
+        "language" : {
+            "terms" : { "field" : "language" }
+        }
+      }
+    }'
+
+
+Filters:
+
+    curl -XGET 'http://localhost:9200/talks/talk/_search?size=10&pretty' -d '{
+      "query": {
+        "query_string": {
+          "query": "acceptance_status: accepted"
+        }
+      },
+      "filter" : {
+        "term" : { "language" : "english" }
+      }  
+    }'
+
+
