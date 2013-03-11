@@ -143,3 +143,92 @@ Filters:
     }'
 
 
+Nested documents
+================
+
+Run ./load_nested_data.sh
+
+    curl -XGET localhost:9200/demo_cvs/cv/_search?pretty -d '{
+      "query": {
+        "query_string": {
+          "query": "talks.title: type"
+        }
+      }
+    }'
+
+    curl -XGET localhost:9200/demo_cvs/cv/_search?pretty -d '{
+      "query": {
+        "query_string": {
+          "query": "talks.title: \"tutorial type\""
+        }
+      }
+    }'
+
+Add mapping:
+  
+    curl -X DELETE http://localhost:9200/demo_cvs  
+
+    curl -X PUT http://localhost:9200/demo_cvs -d '{
+      "mappings":{
+        "cv" : {
+          "properties" : {
+            "talks" : {"type" : "nested"}
+          }
+        }
+      }
+    }'
+
+Try a the same a nested query:
+
+    curl -XGET localhost:9200/demo_cvs/cv/_search?pretty -d '{
+      "query": { 
+        "nested" : {
+          "path" : "talks",
+          "query" : {
+            "bool" : {
+              "must" : [
+                  {
+                    "query_string" : {"query" : "talks.title:\"tutorial type\""}
+                  }
+                ]
+            }
+          }
+        }
+      }
+    }'
+
+    curl -XGET localhost:9200/demo_cvs/cv/_search?pretty -d '{
+      "query": { 
+        "nested" : {
+          "path" : "talks",
+          "query" : {
+            "bool" : {
+              "must" : [
+                  {
+                    "query_string" : {"query" : "talks.title:\"type driven\""}
+                  }
+                ]
+            }
+          }
+        }
+      }
+    }'
+
+Optionally, add a position_offset_gap to separate the fields
+
+    curl -X DELETE http://localhost:9200/demo_cvs
+
+    curl -X PUT http://localhost:9200/demo_cvs -d '{
+      "mappings":{
+        "cv" : {
+          "properties" : {
+            "talks" : {
+              "type" : "nested", 
+              "properties": {
+                "title":{"type":"string","position_offset_gap":256}
+              }
+            }
+          }
+        }
+      }
+    }'
