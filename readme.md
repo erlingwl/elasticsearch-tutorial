@@ -267,3 +267,8 @@ Load data and mappings by running ./load_parent_child_data
     }'
 
 Credits to http://www.spacevatican.org/2012/6/3/fun-with-elasticsearch-s-children-and-nested-documents/ for inspiration to this part of the tutorial
+
+Libraries
+=========
+
+https://github.com/karmi/tire
