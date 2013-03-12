@@ -6,7 +6,7 @@ Prereqiusites
 
 Install Elasticsearch (http://www.elasticsearch.org/guide/reference/setup/installation.html) (requires Java)
 
-Install the Elasticsearch head plugin (http://www.elasticsearch.org/guide/reference/modules/plugins.html)
+Install the Elasticsearch head plugin (http://mobz.github.com/elasticsearch-head/)
 
 
 Indexing, mapping and queries
@@ -232,3 +232,38 @@ Optionally, add a position_offset_gap to separate the fields
         }
       }
     }'
+
+
+Parent / Child documents
+========================
+
+Load data and mappings by running ./load_parent_child_data
+
+    curl -X GET localhost:9200/parent_cvs/child_talk/_search -d '{
+      "query": {
+        "has_parent": {
+          "type": "parent_cv",
+          "query" : {
+            "query_string": {
+              "query": "name: super"
+            }
+          }
+        }
+      }
+    }'
+
+
+    curl -X GET localhost:9200/parent_cvs/parent_cv/_search -d '{
+      "query": {
+        "has_child": {
+          "type": "child_talk",
+          "query" : {
+            "query_string": {
+              "query": "title: \"elasticsearch\""
+            }
+          }
+        }
+      }
+    }'
+
+Credits to http://www.spacevatican.org/2012/6/3/fun-with-elasticsearch-s-children-and-nested-documents/ for inspiration to this part of the tutorial
